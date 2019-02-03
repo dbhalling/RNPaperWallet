@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { StyleSheet, Text, View } from 'react-native';
 
 
@@ -23,6 +24,7 @@ export default class App extends React.Component {
   state = {}
   constructor(props){
     super();
+    
   }
   
   
@@ -33,14 +35,27 @@ export default class App extends React.Component {
   
   async bitcoinBalance(){
     const address = '1337ipJbP7U9mi9cdLngL3g5Napum7tWzM';
-    let url = ('https://api.blockchair.com/bitcoin/dashboards/address/' 
-    + '1337ipJbP7U9mi9cdLngL3g5Napum7tWzM');
-    let response = await fetch(url);
-    let body = await response.json();
-    //this.setState({body});
-    // let { AlertIOS } = require('react-native');
-    console.log('balance', body.data[address].address.balance);
-    //console.log(this.state.body);
+    
+    await axios.get("https://blockchain.info/balance?active=" + address + "&cors=true")      
+    .then(res => {
+        const data = res.data;
+        console.log('Data', data)
+        this.setState({data});
+    }).catch((error) => {
+      console.log(error);
+    });
+    
+    // if (WAValidator.validate(address, BTC)) {
+    //   let url = ('https://api.blockchair.com/bitcoin/dashboards/address/' 
+    //   + '1337ipJbP7U9mi9cdLngL3g5Napum7tWzM');
+    //   let response = await fetch(url);
+    //   let body = await response.json();
+    //   this.setState({body});
+    // } else {
+    //   console.log('this is an invalid address')
+    // }
+    console.log('balance', this.state.data[address].final_balance);
+    // console.log('state', this.state);
   } 
   
   
