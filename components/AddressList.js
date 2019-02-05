@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import axios from 'axios';
-import WAValidator from '../wav';
+import WAValidator from '../WAV/wav';
+import {allApis} from '../apis/allApis';
 
 export default class AddressList extends React.Component {
   constructor(props) {
