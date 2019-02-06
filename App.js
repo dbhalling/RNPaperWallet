@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, StatusBar } from 'react-native';
 
 import Header from './components/Header';
 import AddressList from './components/AddressList';
@@ -65,6 +65,11 @@ export default class App extends React.Component {
   render() {
     return (
         <View>
+          <StatusBar 
+                    hidden={true}
+                    barStyle={'light-content'}
+                    networkActivityIndicatorVisible={true}
+                />
           <Header 
             fiatPrice={this.state.fiatPrice}
             handlefiatPrice={this.state.handleFiatPrice}

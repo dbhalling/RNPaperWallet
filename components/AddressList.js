@@ -1,8 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import axios from 'axios';
 import WAValidator from '../WAV/wav';
 import {allApis} from '../apis/allApis';
+
+import Addresses from './Addresses';
 
 export default class AddressList extends React.Component {
   constructor(props) {
@@ -16,7 +18,8 @@ export default class AddressList extends React.Component {
       popoverOpenInfo: false,
       modal: false,
       qrmodal: false,
-      progressBar: 0
+      progressBar: 0,
+      inputText: ''
     };
     
     this.handleFilename = this.handleFilename.bind(this);
@@ -155,13 +158,9 @@ export default class AddressList extends React.Component {
     });
   }
   
-  addAddress(event, result) {
-    if (event) {
-      event.preventDefault();
-    }
+  addAddress(result) {
     const addObject = this.state.addresses;
-    console.log(result);
-    const address = this._inputElement.value !== '' ? this._inputElement.value.trim() : result || '';
+    const address = this.state.inputText !== '' ? this.state.inputText.trim() : result || '';
     const checkDuplicateArray = (addObject.map(a => a.key));
     const duplicate = checkDuplicateArray.includes(address);
     
@@ -184,11 +183,11 @@ export default class AddressList extends React.Component {
       alert("Please enter a valid address");
     }
 
-    this._inputElement.value = "";
+    this.setState({inputText: ''});
     
-    if (!event) {
-      this.setState({qrmodal: !this.state.qrmodal});
-    }
+    // if (!event) {
+    //   this.setState({qrmodal: !this.state.qrmodal});
+    // }
   }
   
   deleteAddress(key) { 
@@ -222,6 +221,7 @@ export default class AddressList extends React.Component {
   }
   
   render(){
+    console.log(this.state.addresses);
     const csvDownloadHeaders = [
       {label: 'Address', key: 'key'},
       {label: 'btc:', key: 'cryptoAmount'},
@@ -230,7 +230,18 @@ export default class AddressList extends React.Component {
     
     return (
       <View>
-        <Text>AddressList</Text>
+        <TextInput
+          onChangeText={inputText => this.setState({inputText})}
+          value={this.state.inputText}
+        />
+        <Button
+          onPress={this.addAddress}
+          title="Enter a New Paper Wallet"
+          color="#841584"
+        />
+        <Addresses entries={this.state.addresses}
+                   delete={this.deleteAddress}
+        />
       </View>
     );
   }
