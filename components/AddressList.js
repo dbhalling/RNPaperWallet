@@ -19,7 +19,7 @@ export default class AddressList extends React.Component {
       modal: false,
       qrmodal: false,
       progressBar: 0,
-      inputText: ''
+      inputText: ""
     };
     
     this.handleFilename = this.handleFilename.bind(this);
@@ -158,11 +158,12 @@ export default class AddressList extends React.Component {
     });
   }
   
-  addAddress(result) {
+  addAddress() {
     const addObject = this.state.addresses;
-    const address = this.state.inputText !== '' ? this.state.inputText.trim() : result || '';
+    const address = this.state.inputText !== "" ? this.state.inputText.trim() : "";
     const checkDuplicateArray = (addObject.map(a => a.key));
     const duplicate = checkDuplicateArray.includes(address);
+    console.log("address: ", address);
     
     if (duplicate) {
       alert("you have entered a duplicte address");
@@ -183,7 +184,7 @@ export default class AddressList extends React.Component {
       alert("Please enter a valid address");
     }
 
-    this.setState({inputText: ''});
+    this.setState({inputText: ""});
     
     // if (!event) {
     //   this.setState({qrmodal: !this.state.qrmodal});

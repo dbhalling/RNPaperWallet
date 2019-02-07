@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native';
 
 export default class AddressList extends React.Component {
     constructor(props) {
@@ -33,8 +33,11 @@ export default class AddressList extends React.Component {
 
   createAddresses(address) {
     return (
-      <View>
-        <Text>Addresses</Text>
+      <View key={address.key}>
+        <Text>{address.key + ': '}</Text>
+        <Text>{address.cryptoAmount + ': '}</Text>
+        <Text>{address.fiatAmount !== "" ? '$' + address.fiatAmount.toFixed(2) : address.fiatAmount}</Text>
+        <Button title="remove" color="#841584" onPress={() => this.delete(address.key)} /> 
       </View>
     );
   }
@@ -61,11 +64,13 @@ export default class AddressList extends React.Component {
     let addressEntries = this.props.entries;
     let listAddresses = addressEntries.map(this.createAddresses);
     let address = this.state.address;
+    console.log('address', addressEntries[0]);
+    console.log('state', this.state);
 
     return (
-      
-        <Text>Addresses</Text>
-      
+        <View>
+          {listAddresses}
+        </View>
     );
     // <tbody className="theList">
     //     <Modal isOpen={this.state.modal} toggle={this.toggleModal} className={this.props.className}>
