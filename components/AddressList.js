@@ -26,7 +26,7 @@ export default class AddressList extends React.Component {
     this.handleCsvImport = this.handleCsvImport.bind(this);
     this.addAddress = this.addAddress.bind(this);
     this.deleteAddress = this.deleteAddress.bind(this);
-    // this.checkBalance = this.checkBalance.bind(this);
+    this.checkBalance = this.checkBalance.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.toggleQrModal = this.toggleQrModal.bind(this);
     this.toggleInfo = this.toggleInfo.bind(this);
@@ -80,42 +80,40 @@ export default class AddressList extends React.Component {
     });
   }
   
-  // checkBalance(event) {
-  //   this.props.handleCheckBalanceState("checking");
-  //   // const cryptoId = this.props.cryptoId;
-  //   const fiatSym = this.props.fiatSym;
-  //   const handleFiatPrice = this.props.handleFiatPrice;
-  //   const addresses = this.state.addresses.map(a => a.key);
-  //   const cryptoSym = this.props.cryptoSym;
-  //   const cryptoName = this.props.cryptoName;
+  checkBalance() {
+    this.props.handleCheckBalanceState("checking");
+    // const cryptoId = this.props.cryptoId;
+    const fiatSym = this.props.fiatSym;
+    const handleFiatPrice = this.props.handleFiatPrice;
+    const addresses = this.state.addresses.map(a => a.key);
+    const cryptoSym = this.props.cryptoSym;
+    const cryptoName = this.props.cryptoName;
     
-  //   const balancePromises = allApis(addresses, cryptoName, cryptoSym, fiatSym, handleFiatPrice);
+    const balancePromises = allApis(addresses, cryptoName, cryptoSym, fiatSym, handleFiatPrice);
     
-  //   Promise.all(balancePromises)
-  //     .then((result) => {
-  //       // console.log(result[1]);
-  //       let i;
-  //       for (i = 0; i < addresses.length; i++) {
-  //         const addressBalance = parseFloat(result[1][addresses[i]]);
-  //         const updateAddress = addresses[i];
-  //         const index = this.state.addresses.findIndex(x => x.key === updateAddress);
-  //         const addressAttributes = {
-  //           cryptoAmount: addressBalance,
-  //           fiatAmount: addressBalance * this.props.fiatPrice
-  //         };
-  //         this.setState({
-  //           addresses: [
-  //             ...this.state.addresses.slice(0, index),
-  //             Object.assign({}, this.state.addresses[index], addressAttributes),
-  //             ...this.state.addresses.slice(index + 1)
-  //           ]
-  //         });
-  //       }
-  //       this.props.handleCheckBalanceState("checked");
-  //     });
-    
-  //   event.preventDefault();
-  // }
+    Promise.all(balancePromises)
+      .then((result) => {
+        // console.log(result[1]);
+        let i;
+        for (i = 0; i < addresses.length; i++) {
+          const addressBalance = parseFloat(result[1][addresses[i]]);
+          const updateAddress = addresses[i];
+          const index = this.state.addresses.findIndex(x => x.key === updateAddress);
+          const addressAttributes = {
+            cryptoAmount: addressBalance,
+            fiatAmount: addressBalance * this.props.fiatPrice
+          };
+          this.setState({
+            addresses: [
+              ...this.state.addresses.slice(0, index),
+              Object.assign({}, this.state.addresses[index], addressAttributes),
+              ...this.state.addresses.slice(index + 1)
+            ]
+          });
+        }
+        this.props.handleCheckBalanceState("checked");
+      });
+  }
   
   handleFilename(event) {
     this.setState({
@@ -239,6 +237,9 @@ export default class AddressList extends React.Component {
           onPress={this.addAddress}
           title="Enter a New Paper Wallet"
           color="#841584"
+        />
+        <Button title="Check Balance" type="balance" color="blue"
+            onPress={this.checkBalance}
         />
         <Addresses entries={this.state.addresses}
                    delete={this.deleteAddress}

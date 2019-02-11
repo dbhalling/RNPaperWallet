@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Picker, StyleSheet, Text, View } from 'react-native';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -60,9 +60,34 @@ export default class Header extends React.Component {
     );
 
     return (
-        <View>
-          <Text> I AM HERE DAMMIT </Text>
-          <Text> HEADER </Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            height: 300,
+            padding: 20,
+            border: "solid",
+            borderColor: "black",
+            borderWidth: 10,
+            borderRadius: 4
+          }}
+        >
+          <Text className="donation-address" onClick={this.toggle}>
+            {this.state[cryptoSym]} 
+          </Text>
+          <Text>
+            Line Below
+          </Text>
+          
+          
+          <Picker
+            selectedValue={this.state.language}
+            style={{height: 50, width: 100}}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({language: itemValue})
+            }>
+            <Picker.Item label="A" value="java" />
+            <Picker.Item label="B" value="js" />
+          </Picker>
         </View>
     );
   }

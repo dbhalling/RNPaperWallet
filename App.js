@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, StatusBar } from 'react-native';
 import Header from './components/Header';
 import AddressList from './components/AddressList';
 
-
+// GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
 // var WAValidator = require('./wav');
 
 export default class App extends React.Component {
