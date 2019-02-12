@@ -28,7 +28,7 @@ export default class App extends React.Component {
     this.handleCheckBalanceState = this.handleCheckBalanceState.bind(this);
   }
   
-   handleCheckBalanceState(checkBalanceState) {
+  handleCheckBalanceState(checkBalanceState) {
     this.setState({checkBalanceState: checkBalanceState});
   }
   

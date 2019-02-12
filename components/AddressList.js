@@ -161,7 +161,6 @@ export default class AddressList extends React.Component {
     const address = this.state.inputText !== "" ? this.state.inputText.trim() : "";
     const checkDuplicateArray = (addObject.map(a => a.key));
     const duplicate = checkDuplicateArray.includes(address);
-    console.log("address: ", address);
     
     if (duplicate) {
       alert("you have entered a duplicte address");
@@ -220,7 +219,6 @@ export default class AddressList extends React.Component {
   }
   
   render(){
-    console.log(this.state.addresses);
     const csvDownloadHeaders = [
       {label: 'Address', key: 'key'},
       {label: 'btc:', key: 'cryptoAmount'},

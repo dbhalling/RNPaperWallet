@@ -1,5 +1,6 @@
 import React from 'react';
 import { Picker, StyleSheet, Text, View } from 'react-native';
+import CryptoDropdown from "./CryptoDropdown";
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -28,8 +29,8 @@ export default class Header extends React.Component {
       dcr: "Decred Paper Wallet Checker!",
       dgb: "DKkftwDYUQpMZCcDmcgtbLnCk5sf1qV9Hi",
       
-      popoverOpen: false,
-      popoverOpenAd: false,
+      // popoverOpen: false,
+      // popoverOpenAd: false,
     };
     
     this.toggle = this.toggle.bind(this);
@@ -52,17 +53,20 @@ export default class Header extends React.Component {
     const cryptoSym = this.props.cryptoSym;
     const fiatPrice = this.props.fiatPrice;
     const cryptoFiatRate = (
-      <h3 className="text-center" id="fiat-current-price">
-        {`Current ${this.props.cryptoSym.toUpperCase()} / 
-        ${this.props.fiatSym.toUpperCase()} : ${fiatPrice ? fiatPrice.toFixed(2) : ""}`
-        }
-      </h3>
+      <Text id="fiat-current-price">
+        
+      </Text>
     );
+    // <h3 className="text-center" id="fiat-current-price">
+    //     {`Current ${this.props.cryptoSym.toUpperCase()} / 
+    //     ${this.props.fiatSym.toUpperCase()} : ${fiatPrice ? fiatPrice.toFixed(2) : ""}`
+    //     }
+    //   </h3>
+
 
     return (
         <View
           style={{
-            flexDirection: 'row',
             height: 300,
             padding: 20,
             border: "solid",
@@ -71,23 +75,15 @@ export default class Header extends React.Component {
             borderRadius: 4
           }}
         >
-          <Text className="donation-address" onClick={this.toggle}>
+          <Text className="donation-address">
             {this.state[cryptoSym]} 
           </Text>
-          <Text>
-            Line Below
-          </Text>
-          
-          
-          <Picker
-            selectedValue={this.state.language}
-            style={{height: 50, width: 100}}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({language: itemValue})
-            }>
-            <Picker.Item label="A" value="java" />
-            <Picker.Item label="B" value="js" />
-          </Picker>
+          <View>
+            <CryptoDropdown 
+              handleCryptoSymId={this.props.handleCryptoSymId} 
+              handleCheckBalanceState={this.props.handleCheckBalanceState}
+            />
+          </View>
         </View>
     );
   }

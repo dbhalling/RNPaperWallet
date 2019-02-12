@@ -64,8 +64,6 @@ export default class AddressList extends React.Component {
     let addressEntries = this.props.entries;
     let listAddresses = addressEntries.map(this.createAddresses);
     let address = this.state.address;
-    console.log('address', addressEntries[0]);
-    console.log('state', this.state);
 
     return (
         <View>
