@@ -68,7 +68,6 @@ export default class CryptoDropdown extends React.Component {
   render(props) {
     var cryptoList = this.state.crypto;
     var listCryptos = cryptoList.map(this.cryptoList);
-    console.log(this.state.dropdownValue);
     
     return (
       <Picker

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Picker, StyleSheet, Text, View } from 'react-native';
 import CryptoDropdown from "./CryptoDropdown";
+import FiatDropdown from "./FiatDropdown";
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -54,7 +55,9 @@ export default class Header extends React.Component {
     const fiatPrice = this.props.fiatPrice;
     const cryptoFiatRate = (
       <Text id="fiat-current-price">
-        
+        {`Current ${this.props.cryptoSym.toUpperCase()} / 
+        ${this.props.fiatSym.toUpperCase()} : ${fiatPrice ? fiatPrice.toFixed(2) : ""}`
+        }
       </Text>
     );
     // <h3 className="text-center" id="fiat-current-price">
@@ -67,23 +70,35 @@ export default class Header extends React.Component {
     return (
         <View
           style={{
-            height: 300,
-            padding: 20,
+            flex: 1,
+            // height: 300,
+            // padding: 20,
             border: "solid",
             borderColor: "black",
-            borderWidth: 10,
-            borderRadius: 4
+            borderWidth: 2
           }}
         >
           <Text className="donation-address">
             {this.state[cryptoSym]} 
           </Text>
-          <View>
-            <CryptoDropdown 
-              handleCryptoSymId={this.props.handleCryptoSymId} 
-              handleCheckBalanceState={this.props.handleCheckBalanceState}
-            />
+          <View style={{
+            flex: 1, 
+            flexDirection: "row",
+          }}
+          >
+            <View style={{flex: 1}}>
+              <CryptoDropdown 
+                handleCryptoSymId={this.props.handleCryptoSymId} 
+                handleCheckBalanceState={this.props.handleCheckBalanceState}
+              />
+            </View>
+            <View style={{flex: 1}}>
+              <FiatDropdown
+                handleFiatSym={this.props.handleFiatSym}
+              />
+            </View>
           </View>
+          {this.props.checkBalanceState === 'checked' ? cryptoFiatRate : ''}
         </View>
     );
   }

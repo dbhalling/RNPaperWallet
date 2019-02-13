@@ -226,17 +226,19 @@ export default class AddressList extends React.Component {
     ];
     
     return (
-      <View>
+      <View style={styles.container}>
         <TextInput
           onChangeText={inputText => this.setState({inputText})}
           value={this.state.inputText}
+          style={styles.textInput}
         />
         <Button
           onPress={this.addAddress}
           title="Enter a New Paper Wallet"
           color="#841584"
         />
-        <Button title="Check Balance" type="balance" color="blue"
+        <Button title="Check Balance" type="balance" 
+            color="green"
             onPress={this.checkBalance}
         />
         <Addresses entries={this.state.addresses}
@@ -245,6 +247,10 @@ export default class AddressList extends React.Component {
       </View>
     );
   }
+
+  
+  
+  
   // <div className="address-list row">
   //       <Modal isOpen={this.state.modal} toggle={this.toggleModal} className={this.props.className}>
   //         <ModalHeader toggle={this.toggleModal}>
@@ -364,3 +370,25 @@ export default class AddressList extends React.Component {
   //       </div>
   //     </div>
 }
+
+
+ const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        flexDirection: 'column',
+        backgroundColor: '#99ffff',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        borderColor: "black",
+        borderWidth: 2
+    },
+    textInput: {
+      backgroundColor: '#f5f5f0',
+      padding: 2,
+      borderColor: "black",
+      borderWidth: 1,
+      borderRadius: 1,
+      width: 300,
+      height: 20
+    },
+});
