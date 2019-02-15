@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 
 export default class AddressList extends React.Component {
     constructor(props) {
@@ -37,10 +37,22 @@ export default class AddressList extends React.Component {
         <Text>{address.key + ': '}</Text>
         <Text>{address.cryptoAmount + ': '}</Text>
         <Text>{address.fiatAmount !== "" ? '$' + address.fiatAmount.toFixed(2) : address.fiatAmount}</Text>
-        <Button title="remove" color="#841584" onPress={() => this.delete(address.key)} /> 
+        
+        <TouchableHighlight
+          style={styles.submit}
+          onPress={() => this.delete(address.key)}
+          underlayColor='#fff'>
+            <Text style={styles.submitText}>Delete</Text>
+        </TouchableHighlight>
       </View>
     );
   }
+  
+  
+        // <Button 
+        //   style={styles.buttonDelete}
+        //   title="remove" 
+        //   onPress={() => this.delete(address.key)} />
   // <tr key={address.key}>
   //       <td onClick={() => this.handleAddressState(address.key)}>
   //         {address.key}
@@ -101,3 +113,27 @@ export default class AddressList extends React.Component {
     //   </tbody>
   }
 }
+
+
+const styles = StyleSheet.create({
+    buttonDelete: {
+        color: 'orange',
+        borderRadius: 14
+    },
+    submit:{
+    marginRight:40,
+    marginLeft:0,
+    marginTop:10,
+    paddingTop:10,
+    paddingBottom:10,
+    backgroundColor:'red',
+    borderRadius:10,
+    borderWidth: 1,
+    borderColor: '#fff'
+  },
+  submitText:{
+      color:'black',
+      textAlign:'center',
+      fontSize: 20
+  }
+});

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
-import axios from 'axios';
+import { Button, StyleSheet, Text, TextInput,
+         TouchableOpacity, View } from 'react-native';
 import WAValidator from '../WAV/wav';
 import {allApis} from '../apis/allApis';
 
@@ -227,20 +227,75 @@ export default class AddressList extends React.Component {
     
     return (
       <View style={styles.container}>
+        <View style={{
+                // flex: 1/4,
+                flexDirection: "row",
+                justifyContent: "center"
+              }}
+        >
+          {(this.state.addresses.length !== 0) &&
+            (<TouchableOpacity
+               style={{
+                 flex: 1/3, 
+                 justifyContent: "center",
+                 color: "white",
+                 backgroundColor: "#218838"
+               }}
+               onPress={this.checkBalance}
+             >
+               <Text>Check Balance</Text>
+             </TouchableOpacity>
+            )
+          }
+          <TouchableOpacity
+            style={{
+              flex: 1/3,
+              backgroundColor: "#ffc107"
+            }}
+            onPress={console.log("load")}
+          >
+            <Text style={{
+                    color: "white",
+                    textAlign: "center"
+                  }}
+            >
+              Load Spreadsheet
+            </Text>
+          </TouchableOpacity>
+          {(this.props.checkBalanceState === "checked") &&
+            (<TouchableOpacity
+               style={{
+                 flex: 1/3,
+                 justifyContent: "center",
+                 color: "white",
+                 backgroundColor: "#0069d9"
+               }}
+               onPress={console.log("export")}
+             >
+               <Text>Export Spreadsheet</Text>
+             </TouchableOpacity>
+            )
+          }
+        </View>
         <TextInput
           onChangeText={inputText => this.setState({inputText})}
           value={this.state.inputText}
           style={styles.textInput}
         />
-        <Button
+        <TouchableOpacity
+          style={{
+            backgroundColor: "#17a2b8"
+          }}
           onPress={this.addAddress}
-          title="Enter a New Paper Wallet"
-          color="#841584"
-        />
-        <Button title="Check Balance" type="balance" 
-            color="green"
-            onPress={this.checkBalance}
-        />
+        >
+          <Text style={{
+                  color: "white",
+                  textAlign: "center"
+                }}
+          >
+            Enter a New Paper Wallet
+          </Text>
+        </TouchableOpacity>
         <Addresses entries={this.state.addresses}
                    delete={this.deleteAddress}
         />
@@ -374,13 +429,13 @@ export default class AddressList extends React.Component {
 
  const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        flexDirection: 'column',
-        backgroundColor: '#99ffff',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        borderColor: "black",
-        borderWidth: 2
+      flex: 1,
+      flexDirection: 'column',
+      backgroundColor: '#99ffff',
+      alignItems: 'center',
+      justifyContent: 'flex-start',
+      borderColor: "black",
+      borderWidth: 2
     },
     textInput: {
       backgroundColor: '#f5f5f0',

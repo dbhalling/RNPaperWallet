@@ -71,8 +71,6 @@ export default class Header extends React.Component {
         <View
           style={{
             flex: 1,
-            // height: 300,
-            // padding: 20,
             border: "solid",
             borderColor: "black",
             borderWidth: 2
@@ -98,7 +96,9 @@ export default class Header extends React.Component {
               />
             </View>
           </View>
-          {this.props.checkBalanceState === 'checked' ? cryptoFiatRate : ''}
+          <Text>
+            {this.props.checkBalanceState === 'checked' ? cryptoFiatRate : ''}
+          </Text>
         </View>
     );
   }
