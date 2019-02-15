@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, StatusBar } from 'react-native';
 
 import Header from './components/Header';
 import AddressList from './components/AddressList';
@@ -64,7 +64,7 @@ export default class App extends React.Component {
   
   render() {
     return (
-        <View style={{
+        <ScrollView style={{
             flex: 1, 
             // flexDirection: "row",
           }}
@@ -94,7 +94,7 @@ export default class App extends React.Component {
             checkBalanceState={this.state.checkBalanceState}
             handleCheckBalanceState={this.handleCheckBalanceState}
           />
-        </View>
+        </ScrollView>
     );
   }
 }

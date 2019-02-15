@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View, TouchableHighlight } from 'react-native';
+import { Button, Modal, StyleSheet, Text, View, TouchableHighlight } from 'react-native';
 
 export default class AddressList extends React.Component {
     constructor(props) {
@@ -34,11 +34,16 @@ export default class AddressList extends React.Component {
   createAddresses(address) {
     return (
       <View key={address.key}>
-        <Text>{address.key + ': '}</Text>
-        <Text>{address.cryptoAmount + ': '}</Text>
-        <Text>{address.fiatAmount !== "" ? '$' + address.fiatAmount.toFixed(2) : address.fiatAmount}</Text>
-        
-        <TouchableHighlight
+      <TouchableHighlight style={styles.submit}
+          onPress={() => this.handleAddressState(address.key)}
+          underlayColor='#fff'>
+          <View>
+            <Text>{address.key + ': '}</Text>
+            <Text>{address.cryptoAmount + ': '}</Text>
+            <Text>{address.fiatAmount !== "" ? '$' + address.fiatAmount.toFixed(2) : address.fiatAmount}</Text>
+          </View>
+       </TouchableHighlight>
+       <TouchableHighlight
           style={styles.submit}
           onPress={() => this.delete(address.key)}
           underlayColor='#fff'>
@@ -79,6 +84,20 @@ export default class AddressList extends React.Component {
 
     return (
         <View>
+          <Modal animationType = {"slide"} transparent = {false}
+             visible = {this.state.modal}
+             onRequestClose = {() => { console.log("Modal has been closed.") } }>
+             
+             <View>
+                <Text>{address}</Text>
+                
+                <TouchableHighlight onPress = {() => {
+                   this.toggleModal(!this.state.modal)}}>
+                   
+                   <Text>Close Modal</Text>
+                </TouchableHighlight>
+             </View>
+          </Modal>
           {listAddresses}
         </View>
     );
