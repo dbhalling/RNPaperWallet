@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Modal, StyleSheet, Text, View, TouchableHighlight } from 'react-native';
+import QRCode from 'react-native-qrcode';
 
 export default class AddressList extends React.Component {
     constructor(props) {
@@ -91,9 +92,15 @@ export default class AddressList extends React.Component {
              <View>
                 <Text>{address}</Text>
                 
+                <QRCode
+                  value={address}
+                  size={200}
+                  bgColor='black'
+                  fgColor='white'/>
+                
                 <TouchableHighlight onPress = {() => {
                    this.toggleModal(!this.state.modal)}}>
-                   
+                  
                    <Text>Close Modal</Text>
                 </TouchableHighlight>
              </View>
@@ -101,6 +108,17 @@ export default class AddressList extends React.Component {
           {listAddresses}
         </View>
     );
+    
+    
+                // <View>  
+                //   <QRCode
+                //     value={address}
+                //     size={200}
+                //     bgColor='black'
+                //     fgColor='white'/>
+                // </View> 
+    
+    
     // <tbody className="theList">
     //     <Modal isOpen={this.state.modal} toggle={this.toggleModal} className={this.props.className}>
     //       <ModalHeader toggle={this.toggleModal}>
