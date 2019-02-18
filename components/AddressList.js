@@ -1,10 +1,11 @@
 import React from 'react';
 import { Button, StyleSheet, Text, TextInput,
-         TouchableOpacity, View } from 'react-native';
+         TouchableOpacity, View, Modal } from 'react-native';
 import WAValidator from '../WAV/wav';
 import {allApis} from '../apis/allApis';
 
 import Addresses from './Addresses';
+import QrAddressReader from './QrAddressReader';
 
 export default class AddressList extends React.Component {
   constructor(props) {
@@ -21,7 +22,7 @@ export default class AddressList extends React.Component {
       progressBar: 0,
       inputText: ""
     };
-    
+
     this.handleFilename = this.handleFilename.bind(this);
     this.handleCsvImport = this.handleCsvImport.bind(this);
     this.addAddress = this.addAddress.bind(this);
@@ -32,12 +33,12 @@ export default class AddressList extends React.Component {
     this.toggleInfo = this.toggleInfo.bind(this);
     this.handleSocial = this.handleSocial.bind(this);
   }
-  
+
   componentDidUpdate(prevProps) {
     this.clearAddresses(prevProps);
     this.updateAddresses(prevProps);
   }
-  
+
 
   clearAddresses(prevProps) {
     if (prevProps.cryptoSym !== this.props.cryptoSym) {
@@ -46,7 +47,7 @@ export default class AddressList extends React.Component {
       this.props.handleFiatPrice(0);
     }
   }
-  
+
   updateAddresses(prevProps) {
     if (prevProps.fiatSym !== this.props.fiatSym) {
       const addresses = this.state.addresses.map(a => a.key);
@@ -65,21 +66,21 @@ export default class AddressList extends React.Component {
       }
     }
   }
-  
+
   toggleModal() {
     this.setState({modal: !this.state.modal});
   }
-  
+
   toggleQrModal() {
     this.setState({qrmodal: !this.state.qrmodal});
   }
-  
+
   toggleInfo() {
     this.setState({
       popoverOpenInfo: !this.state.popoverOpenInfo
     });
   }
-  
+
   checkBalance() {
     this.props.handleCheckBalanceState("checking");
     // const cryptoId = this.props.cryptoId;
@@ -88,9 +89,9 @@ export default class AddressList extends React.Component {
     const addresses = this.state.addresses.map(a => a.key);
     const cryptoSym = this.props.cryptoSym;
     const cryptoName = this.props.cryptoName;
-    
+
     const balancePromises = allApis(addresses, cryptoName, cryptoSym, fiatSym, handleFiatPrice);
-    
+
     Promise.all(balancePromises)
       .then((result) => {
         // console.log(result[1]);
@@ -114,21 +115,21 @@ export default class AddressList extends React.Component {
         this.props.handleCheckBalanceState("checked");
       });
   }
-  
+
   handleFilename(event) {
     this.setState({
-      filename: 
-        event.target.value.includes('.csv') ? 
+      filename:
+        event.target.value.includes('.csv') ?
           event.target.value : event.target.value  + '.csv'
     });
   }
-  
+
   handleCsvImport(data) {
     data.map((row) => {
       row.map((col) => {
         const addObject = this.state.addresses;
         const checkDuplicateArray = (addObject.map(a => a.key));
-        
+
         if (WAValidator.validate(col.trim(), this.props.cryptoSym)) {
           if (checkDuplicateArray.includes(col.trim())) {
             alert("you have entered a duplicte address");
@@ -138,7 +139,7 @@ export default class AddressList extends React.Component {
               cryptoAmount: '',
               fiatAmount: ''
             };
-            
+
             this.setState((prevState) => {
               return {
                 addresses: prevState.addresses.concat(newAddress),
@@ -155,13 +156,17 @@ export default class AddressList extends React.Component {
       return null;
     });
   }
-  
-  addAddress() {
+
+  addAddress(address) {
     const addObject = this.state.addresses;
-    const address = this.state.inputText !== "" ? this.state.inputText.trim() : "";
+    if (address) {
+      console.log("recieved address from qr reader")
+    }else {
+      const address = this.state.inputText !== "" ? this.state.inputText.trim() : "";
+    }
     const checkDuplicateArray = (addObject.map(a => a.key));
     const duplicate = checkDuplicateArray.includes(address);
-    
+
     if (duplicate) {
       alert("you have entered a duplicte address");
     } else if (address !== ""
@@ -182,13 +187,13 @@ export default class AddressList extends React.Component {
     }
 
     this.setState({inputText: ""});
-    
+
     // if (!event) {
     //   this.setState({qrmodal: !this.state.qrmodal});
     // }
   }
-  
-  deleteAddress(key) { 
+
+  deleteAddress(key) {
     var filteredAddresses = this.state.addresses.filter(function (address) {
       return (address.key !== key);
     });
@@ -197,7 +202,7 @@ export default class AddressList extends React.Component {
       addresses: filteredAddresses
     });
   }
-  
+
   handleSocial(social) {
     switch(social) {
       case "github": {
@@ -217,14 +222,14 @@ export default class AddressList extends React.Component {
       }
     }
   }
-  
+
   render(){
     const csvDownloadHeaders = [
       {label: 'Address', key: 'key'},
       {label: 'btc:', key: 'cryptoAmount'},
       {label: 'USD:', key: 'fiatAmount'}
     ];
-    
+
     return (
       <View style={styles.container}>
         <View style={{
@@ -236,7 +241,7 @@ export default class AddressList extends React.Component {
           {(this.state.addresses.length !== 0) &&
             (<TouchableOpacity
                style={{
-                 flex: 1/3, 
+                 flex: 1/3,
                  justifyContent: "center",
                  color: "white",
                  backgroundColor: "#218838"
@@ -277,6 +282,21 @@ export default class AddressList extends React.Component {
             )
           }
         </View>
+        <Modal animationType = {"slide"} transparent = {false}
+           visible = {this.state.qrmodal}
+           onRequestClose = {() => { console.log("Modal has been closed.") } }
+         >
+           {this.state.qrmodal && <QrAddressReader addAddress={this.addAddress} toggleQrModal={this.toggleQrModal} />}
+        </Modal>
+        <TouchableOpacity
+           style={{
+             color: "white",
+             backgroundColor: "#0069d9"
+           }}
+           onPress={this.toggleQrModal}
+         >
+          <Text>QRCode</Text>
+        </TouchableOpacity>
         <TextInput
           onChangeText={inputText => this.setState({inputText})}
           value={this.state.inputText}
@@ -303,9 +323,9 @@ export default class AddressList extends React.Component {
     );
   }
 
-  
-  
-  
+
+
+
   // <div className="address-list row">
   //       <Modal isOpen={this.state.modal} toggle={this.toggleModal} className={this.props.className}>
   //         <ModalHeader toggle={this.toggleModal}>
@@ -343,11 +363,11 @@ export default class AddressList extends React.Component {
   //           { (this.props.checkBalanceState === 'checking') && <FaSync className={"fa-spin"} /> }
   //         </Button>
   //         <Button type="import" color="warning" size="lg" className="d-block"
-  //           onClick={this.toggleModal} 
+  //           onClick={this.toggleModal}
   //         >
   //           Load Spreadsheet
   //         </Button>
-  //         <CSVLink data={this.state.addresses} 
+  //         <CSVLink data={this.state.addresses}
   //           filename={this.state.filename}
   //           className="btn btn-lg btn-primary"
   //           headers={csvDownloadHeaders}
@@ -383,7 +403,7 @@ export default class AddressList extends React.Component {
   //                 <InputGroupAddon addonType="prepend">
   //                   <Button onClick={this.toggleQrModal} >
   //                     <FontAwesomeIcon icon="qrcode" />
-  //                   </Button>              
+  //                   </Button>
   //                 </InputGroupAddon>
   //                 <Input className="" id="input-address-text" innerRef={(a) => this._inputElement = a} />
   //                 <InputGroupAddon addonType="append">
@@ -412,7 +432,7 @@ export default class AddressList extends React.Component {
   //           </Form>
   //         </div>
   //         <Table hover={true}>
-  //           <Totals   
+  //           <Totals
   //             fiatSym={this.props.fiatSym}
   //             addresses={this.state.addresses}
   //             checkBalanceState={this.props.checkBalanceState}
