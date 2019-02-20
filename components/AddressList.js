@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, StyleSheet, Text, TextInput,
-         TouchableOpacity, View, Modal } from 'react-native';
+         TouchableOpacity, View, Modal, ScrollView } from 'react-native';
 import WAValidator from '../WAV/wav';
 import {allApis} from '../apis/allApis';
 
@@ -12,7 +12,10 @@ export default class AddressList extends React.Component {
     super(props);
 
     this.state = {
-      addresses: [],
+      addresses: [
+        {key: "1337ipJbP7U9mi9cdLngL3g5Napum7tWzM", cryptoAmount: 1, fiatAmount: 3600.63},
+        {key: "3CMCRgEm8HVz3DrWaCCid3vAANE42jcEv9", cryptoAmount: 10, fiatAmount: 36000.63}
+      ],
       cryptoSym: this.props.cryptoSym,
       cryptoId: this.props.cryptoId,
       filename: 'PaperWalletChecker.csv',
@@ -38,7 +41,6 @@ export default class AddressList extends React.Component {
     this.clearAddresses(prevProps);
     this.updateAddresses(prevProps);
   }
-
 
   clearAddresses(prevProps) {
     if (prevProps.cryptoSym !== this.props.cryptoSym) {
@@ -157,19 +159,15 @@ export default class AddressList extends React.Component {
     });
   }
 
-  addAddress(address) {
+  addAddress(result) {
     const addObject = this.state.addresses;
-    if (address) {
-      console.log("recieved address from qr reader")
-    }else {
-      const address = this.state.inputText !== "" ? this.state.inputText.trim() : "";
-    }
+    const address = this.state.inputText !== "" ? this.state.inputText.trim() : result;
     const checkDuplicateArray = (addObject.map(a => a.key));
     const duplicate = checkDuplicateArray.includes(address);
 
     if (duplicate) {
       alert("you have entered a duplicte address");
-    } else if (address !== ""
+    } else if (address !== Object
               && WAValidator.validate(address, this.props.cryptoSym))  {
       var newAddress = {
         key: address,
@@ -231,9 +229,9 @@ export default class AddressList extends React.Component {
     ];
 
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container} contentContainerStyle={styles.contentContainerStyle}>
         <View style={{
-                // flex: 1/4,
+                // flex: 1,
                 flexDirection: "row",
                 justifyContent: "center"
               }}
@@ -242,13 +240,17 @@ export default class AddressList extends React.Component {
             (<TouchableOpacity
                style={{
                  flex: 1/3,
-                 justifyContent: "center",
-                 color: "white",
                  backgroundColor: "#218838"
                }}
                onPress={this.checkBalance}
              >
-               <Text>Check Balance</Text>
+               <Text style={{
+                       color: "white",
+                       textAlign: "center"
+                     }}
+               >
+                 Check Balance
+               </Text>
              </TouchableOpacity>
             )
           }
@@ -267,17 +269,21 @@ export default class AddressList extends React.Component {
               Load Spreadsheet
             </Text>
           </TouchableOpacity>
-          {(this.props.checkBalanceState === "checked") &&
+          {(this.state.addresses.length !== 0) &&
             (<TouchableOpacity
                style={{
                  flex: 1/3,
-                 justifyContent: "center",
-                 color: "white",
                  backgroundColor: "#0069d9"
                }}
                onPress={console.log("export")}
              >
-               <Text>Export Spreadsheet</Text>
+               <Text style={{
+                       color: "white",
+                       textAlign: "center"
+                     }}
+               >
+                 Export Spreadsheet
+               </Text>
              </TouchableOpacity>
             )
           }
@@ -318,8 +324,10 @@ export default class AddressList extends React.Component {
         </TouchableOpacity>
         <Addresses entries={this.state.addresses}
                    delete={this.deleteAddress}
+                   cryptoSym={this.state.cryptoSym}
+                   fiatSym={this.props.fiatSym}
         />
-      </View>
+      </ScrollView>
     );
   }
 
@@ -450,20 +458,22 @@ export default class AddressList extends React.Component {
  const styles = StyleSheet.create({
     container: {
       flex: 1,
-      flexDirection: 'column',
+      // flexDirection: 'column',
       backgroundColor: '#99ffff',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
       borderColor: "black",
       borderWidth: 2
+    },
+    contentContainerStyle: {
+      alignItems: 'center',
+      justifyContent: 'flex-start'
     },
     textInput: {
       backgroundColor: '#f5f5f0',
       padding: 2,
       borderColor: "black",
       borderWidth: 1,
-      borderRadius: 1,
+      borderRadius: 14,
       width: 300,
-      height: 20
+      height: 30
     },
 });

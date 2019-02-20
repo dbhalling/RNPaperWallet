@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, StatusBar } from 'react-native';
 
-import Header from './components/Header';
+import HeaderView from './components/HeaderView';
 import AddressList from './components/AddressList';
 
 // GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
@@ -10,7 +10,7 @@ import AddressList from './components/AddressList';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    
+
     // cryptoId is used in CoinMarketCap api
     this.state = {
       fiatPrice: 0,
@@ -21,29 +21,29 @@ export default class App extends React.Component {
       cryptoName: "bitcoin",
       checkBalanceState: "unchecked"
     };
-    
+
     this.handleFiatPrice = this.handleFiatPrice.bind(this);
     this.handleFiatSym = this.handleFiatSym.bind(this);
     this.handleCryptoSymId = this.handleCryptoSymId.bind(this);
     this.handleCheckBalanceState = this.handleCheckBalanceState.bind(this);
   }
-  
+
   handleCheckBalanceState(checkBalanceState) {
     this.setState({checkBalanceState: checkBalanceState});
   }
-  
+
   handleCryptoSymId(cryptoSym, cryptoId, cryptoName) {
     this.setState({cryptoSym: cryptoSym, cryptoId: cryptoId, cryptoName: cryptoName});
   }
-  
+
   handleFiatSym(fiatSym) {
     this.setState({fiatSym: fiatSym});
-    
+
     if (this.state.currentPriceFiat !== {}) {
       this.setState({fiatPrice: this.state.currentPriceFiat[fiatSym]});
     }
   }
-  
+
   handleFiatPrice(price, current_prices) {
     if (current_prices) {
       this.setState(() => {
@@ -52,7 +52,7 @@ export default class App extends React.Component {
         };
       });
     }
-    
+
     if (this.state.currentPriceFiat !== {}) {
       this.setState(() => {
         return {
@@ -61,20 +61,20 @@ export default class App extends React.Component {
       });
     }
   }
-  
+
   render() {
     return (
-        <ScrollView style={{
-            flex: 1, 
+        <View style={{
+            flex: 1,
             // flexDirection: "row",
           }}
         >
-          <StatusBar 
+          <StatusBar
                     hidden={true}
                     barStyle={'light-content'}
                     networkActivityIndicatorVisible={true}
                 />
-          <Header 
+          <HeaderView
             fiatPrice={this.state.fiatPrice}
             handlefiatPrice={this.state.handleFiatPrice}
             fiatSym={this.state.fiatSym}
@@ -84,7 +84,7 @@ export default class App extends React.Component {
             checkBalanceState={this.state.checkBalanceState}
             handleCheckBalanceState={this.handleCheckBalanceState}
           />
-          <AddressList 
+          <AddressList
             fiatSym={this.state.fiatSym}
             fiatPrice={this.state.fiatPrice}
             handleFiatPrice={this.handleFiatPrice}
@@ -94,7 +94,7 @@ export default class App extends React.Component {
             checkBalanceState={this.state.checkBalanceState}
             handleCheckBalanceState={this.handleCheckBalanceState}
           />
-        </ScrollView>
+        </View>
     );
   }
 }

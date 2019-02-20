@@ -1,33 +1,36 @@
 import React from 'react';
-import { Button, Modal, StyleSheet, Text, View, TouchableHighlight } from 'react-native';
+import { Button, Modal, StyleSheet, View, TouchableHighlight } from 'react-native';
 import QRCode from 'react-native-qrcode';
+import { Container, Content, Card, CardItem, Body, Text } from "native-base";
+import { Font } from 'expo';
+import { Ionicons } from '@expo/vector-icons';
 
 export default class AddressList extends React.Component {
     constructor(props) {
     super(props);
-    
+
     this.state = {
       modal: false,
       address: '',
       popoverOpen: false
     };
-    
+
     this.toggle = this.toggle.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.createAddresses = this.createAddresses.bind(this);
   }
-  
+
   toggle() {
     this.setState({
       popoverOpen: !this.state.popoverOpen
     });
   }
-  
+
   handleAddressState(address) {
     this.setState({address: address});
     this.toggleModal();
   }
-  
+
   toggleModal(address) {
     this.setState({modal: !this.state.modal});
   }
@@ -35,44 +38,44 @@ export default class AddressList extends React.Component {
   createAddresses(address) {
     return (
       <View key={address.key}>
-      <TouchableHighlight style={styles.submit}
-          onPress={() => this.handleAddressState(address.key)}
-          underlayColor='#fff'>
-          <View>
-            <Text>{address.key + ': '}</Text>
-            <Text>{address.cryptoAmount + ': '}</Text>
-            <Text>{address.fiatAmount !== "" ? '$' + address.fiatAmount.toFixed(2) : address.fiatAmount}</Text>
-          </View>
-       </TouchableHighlight>
-       <TouchableHighlight
-          style={styles.submit}
-          onPress={() => this.delete(address.key)}
-          underlayColor='#fff'>
-            <Text style={styles.submitText}>Delete</Text>
-        </TouchableHighlight>
+          <Card>
+            <TouchableHighlight
+              onPress={() => this.handleAddressState(address.key)}
+            >
+              <CardItem header bordered>
+                <Text>{address.key}</Text>
+              </CardItem>
+            </TouchableHighlight>
+            <Text style={{
+                    textAlign: "center"
+                  }}
+            >
+              {address.cryptoAmount !== "" ? this.props.cryptoSym.toUpperCase() +
+                ": " + address.cryptoAmount : address.cryptoAmount}
+            </Text>
+            <Text style={{
+                    textAlign: "center"
+                  }}
+            >
+              {address.fiatAmount !== "" ? this.props.fiatSym.toUpperCase() +
+                ": " + address.fiatAmount.toFixed(2) : address.fiatAmount}
+            </Text>
+            <TouchableHighlight
+              onPress={() => this.delete(address.key)}
+            >
+              <CardItem footer bordered>
+                <Text style={{
+                        color: "red"
+                      }}
+              >
+                Delete
+              </Text>
+              </CardItem>
+            </TouchableHighlight>
+          </Card>
       </View>
     );
   }
-  
-  
-        // <Button 
-        //   style={styles.buttonDelete}
-        //   title="remove" 
-        //   onPress={() => this.delete(address.key)} />
-  // <tr key={address.key}>
-  //       <td onClick={() => this.handleAddressState(address.key)}>
-  //         {address.key}
-  //       </td>
-  //       <td>
-  //         {address.cryptoAmount}
-  //       </td>
-  //       <td>
-  //         {address.fiatAmount !== '' ? '$' + address.fiatAmount.toFixed(2) : address.fiatAmount}
-  //       </td>
-  //       <td>
-  //         <Button size="sm" color="danger" onClick={() => this.delete(address.key)}>remove</Button> 
-  //       </td>
-  //     </tr>
 
   delete(key) {
     this.props.delete(key);
@@ -84,86 +87,41 @@ export default class AddressList extends React.Component {
     let address = this.state.address;
 
     return (
-        <View>
+        <Content>
           <Modal animationType = {"slide"} transparent = {false}
              visible = {this.state.modal}
-             onRequestClose = {() => { console.log("Modal has been closed.") } }>
-             
+             onRequestClose = {() => { this.toggleModal() } }
+          >
              <View>
                 <Text>{address}</Text>
-                
                 <QRCode
                   value={address}
                   size={200}
                   bgColor='black'
-                  fgColor='white'/>
-                
+                  fgColor='white'
+                />
                 <TouchableHighlight onPress = {() => {
-                   this.toggleModal(!this.state.modal)}}>
-                  
-                   <Text>Close Modal</Text>
+                   this.toggleModal()}}
+                >
+                  <Text>Close Modal</Text>
                 </TouchableHighlight>
              </View>
           </Modal>
           {listAddresses}
-        </View>
+        </Content>
     );
-    
-    
-                // <View>  
-                //   <QRCode
-                //     value={address}
-                //     size={200}
-                //     bgColor='black'
-                //     fgColor='white'/>
-                // </View> 
-    
-    
-    // <tbody className="theList">
-    //     <Modal isOpen={this.state.modal} toggle={this.toggleModal} className={this.props.className}>
-    //       <ModalHeader toggle={this.toggleModal}>
-    //         <div onClick={this.toggle}>
-    //           <Clipboard text={address}>
-    //             <div>
-    //               {address}
-    //             </div>
-    //             <div className="text-center">
-    //               <FontAwesomeIcon icon="copy" id="PopoverAddress" />
-    //             </div>
-    //           </Clipboard>
-    //         </div>
-    //         <Popover className="popoverAddress" placement="bottom" isOpen={this.state.popoverOpen}
-    //                     target="PopoverAddress" toggle={this.toggle}
-    //                     boundariesElement=".alert-copy-clipboard"
-    //             >
-    //               <Alert color="warning" className="alert-copy-clipboard">
-    //                 Copied to Clipboard
-    //               </Alert>
-    //         </Popover>
-    //       </ModalHeader>
-    //       <ModalBody className="text-center">
-    //         <QRCode value={address} level="H" className="qrcode-canvas" />
-    //       </ModalBody>
-    //     </Modal>
-        
-    //     {listAddresses}
-    //   </tbody>
   }
 }
 
 
 const styles = StyleSheet.create({
-    buttonDelete: {
-        color: 'orange',
-        borderRadius: 14
-    },
     submit:{
     marginRight:40,
     marginLeft:0,
     marginTop:10,
     paddingTop:10,
     paddingBottom:10,
-    backgroundColor:'red',
+    backgroundColor:'#b3b3ff',
     borderRadius:10,
     borderWidth: 1,
     borderColor: '#fff'
@@ -172,5 +130,11 @@ const styles = StyleSheet.create({
       color:'black',
       textAlign:'center',
       fontSize: 20
+  },
+  buttonDelete:{
+      backgroundColor:'red',
+      borderRadius: 14,
+      width: 100,
+      height: 30
   }
 });
