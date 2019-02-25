@@ -1,15 +1,16 @@
 import React from 'react';
-import { Picker, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Container, Content, Picker, Form } from "native-base";
 
 
 export default class FiatDropdown extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.toggle = this.toggle.bind(this);
     this.toggleFiat = this.toggleFiat.bind(this);
     this.fiatList = this.fiatList.bind(this);
-  
+
     this.state = {
       fiat: [
         "aed", "ars", "aud", "bch", "bdt", "bhd", "bmd", "bnb",
@@ -24,21 +25,18 @@ export default class FiatDropdown extends React.Component {
       dropdownValue: "usd"
     };
   }
-  
+
   fiatList(fiat) {
     return (
       <Picker.Item key={fiat} label={fiat.toUpperCase()}
-        value={fiat} 
+        value={fiat}
       />
     );
-    // <DropdownItem key={fiat} onClick={() => this.toggleFiat(fiat)}>
-    //     {fiat.toUpperCase()}
-    //   </DropdownItem>
   }
-  
+
   toggleFiat(itemValue, itemIndex) {
     const fiat = this.state.fiat[itemIndex];
-    
+
     this.setState({dropdownValue: itemValue});
     this.props.handleFiatSym(fiat);
   }
@@ -48,45 +46,26 @@ export default class FiatDropdown extends React.Component {
       dropdownOpen: !prevState.dropdownOpen
     }));
   }
-  
+
   render(props) {
     const fiatList = this.state.fiat;
     const listFiat = fiatList.map(this.fiatList);
-    
+
     return (
-      <Picker
-        selectedValue={this.state.dropdownValue}
-        onValueChange={(itemValue, itemIndex) =>
-          this.toggleFiat(itemValue, itemIndex)
-      }>
-        {listFiat}
-      </Picker>
+      <Content>
+        <Form>
+          <Picker
+            mode="dropdown"
+            textStyle={{  }}
+            selectedValue={this.state.dropdownValue}
+            onValueChange={(itemValue, itemIndex) =>
+              this.toggleFiat(itemValue, itemIndex)
+            }
+          >
+            {listFiat}
+          </Picker>
+        </Form>
+      </Content>
     );
-    // <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-    //     <DropdownToggle caret>
-    //       {this.state.dropdownValue.toUpperCase()}
-    //     </DropdownToggle>
-    //     <DropdownMenu
-    //       modifiers={{
-    //         setMaxHeight: {
-    //           enabled: true,
-    //           order: 890,
-    //           fn: (data) => {
-    //             return {
-    //               ...data,
-    //               styles: {
-    //                 ...data.styles,
-    //                 overflow: 'auto',
-    //                 maxHeight: 200,
-    //               },
-    //             };
-    //           },
-    //         },
-    //       }}
-    //       className="fiat-list-dropdown"
-    //     >
-    //       {listFiat}
-    //     </DropdownMenu>
-    //   </ButtonDropdown>
   }
-}  
+}

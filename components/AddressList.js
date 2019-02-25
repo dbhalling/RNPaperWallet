@@ -185,10 +185,6 @@ export default class AddressList extends React.Component {
     }
 
     this.setState({inputText: ""});
-
-    // if (!event) {
-    //   this.setState({qrmodal: !this.state.qrmodal});
-    // }
   }
 
   deleteAddress(key) {
@@ -330,128 +326,6 @@ export default class AddressList extends React.Component {
       </ScrollView>
     );
   }
-
-
-
-
-  // <div className="address-list row">
-  //       <Modal isOpen={this.state.modal} toggle={this.toggleModal} className={this.props.className}>
-  //         <ModalHeader toggle={this.toggleModal}>
-  //           <div>
-  //             <h3>
-  //               Import Your Spreadsheet:
-  //             </h3>
-  //           </div>
-  //         </ModalHeader>
-  //         <ModalBody>
-  //           <CSVReader
-  //             cssClass="csv-import"
-  //             onFileLoaded={this.handleCsvImport}
-  //           />
-  //         </ModalBody>
-  //       </Modal>
-  //       <Modal isOpen={this.state.qrmodal} toggle={this.toggleQrModal} className="">
-  //         <ModalHeader toggle={this.toggleQrModal}>
-  //           <div>
-  //             <h3>
-  //               Qrcode Address Reader:
-  //             </h3>
-  //           </div>
-  //         </ModalHeader>
-  //         <ModalBody>
-  //           {this.state.qrmodal && <QrAddressReader addAddress={this.addAddress} />}
-  //         </ModalBody>
-  //       </Modal>
-  //       <div className="col-3 address-buttons">
-  //         <Button type="balance" color="success" size="lg"
-  //           onClick={this.checkBalance} disabled={this.props.checkBalanceState === 'checking'}
-  //         >
-  //           { (this.props.checkBalanceState !== 'checking') && "Check Balance" }
-  //           { (this.props.checkBalanceState === 'checking') && "Checking Balance  " }
-  //           { (this.props.checkBalanceState === 'checking') && <FaSync className={"fa-spin"} /> }
-  //         </Button>
-  //         <Button type="import" color="warning" size="lg" className="d-block"
-  //           onClick={this.toggleModal}
-  //         >
-  //           Load Spreadsheet
-  //         </Button>
-  //         <CSVLink data={this.state.addresses}
-  //           filename={this.state.filename}
-  //           className="btn btn-lg btn-primary"
-  //           headers={csvDownloadHeaders}
-  //           target="_blank"
-  //         >
-  //             Export Spreadsheet
-  //         </CSVLink>
-  //         <h5 className="export-filename">Export Filename : </h5>
-  //         <Input className="col-9" onChange={this.handleFilename}></Input>
-  //         <div className="social-media">
-  //           <div className="col-4 d-inline">
-  //             <Button size="sm" onClick={() => this.handleSocial("github")}>
-  //               <FaGithub />
-  //             </Button>
-  //           </div>
-  //           <div className="col-4 d-inline">
-  //             <Button size="sm" onClick={() => this.handleSocial("reddit")}>
-  //               <FaReddit />
-  //             </Button>
-  //           </div>
-  //           <div className="col-4 d-inline">
-  //             <Button size="sm" onClick={() => this.handleSocial("bitcoin")}>
-  //               <FaBitcoin />
-  //             </Button>
-  //           </div>
-  //         </div>
-  //       </div>
-  //       <div className="col-9">
-  //         <div className="input-form col-12">
-  //           <Form inline onSubmit={this.addAddress}>
-  //             <FormGroup className="col-12 row no-gutters">
-  //               <InputGroup className="col-12">
-  //                 <InputGroupAddon addonType="prepend">
-  //                   <Button onClick={this.toggleQrModal} >
-  //                     <FontAwesomeIcon icon="qrcode" />
-  //                   </Button>
-  //                 </InputGroupAddon>
-  //                 <Input className="" id="input-address-text" innerRef={(a) => this._inputElement = a} />
-  //                 <InputGroupAddon addonType="append">
-  //                   <Button className="input-address-submit" color="info" type="submit">Enter a New Paper Wallet</Button>
-  //                   <Button id="Popover1" onClick={this.toggleInfo}>
-  //                     <FontAwesomeIcon icon="question-circle" inverse className="" />
-  //                   </Button>
-  //                   <Popover className="popover" placement="bottom" isOpen={this.state.popoverOpenInfo}
-  //                           target="Popover1" toggle={this.toggleInfo}
-  //                   >
-  //                     <PopoverHeader className="text-center">Public Addresses Only</PopoverHeader>
-  //                     <PopoverBody>
-  //                       <ul>
-  //                         <li>Validates the Public Address</li>
-  //                         <li>Enter One Address at a Time</li>
-  //                         <li>You can Import Public Keys from a Spreadsheet</li>
-  //                         <li>Click on any Address to View a Qrcode</li>
-  //                       </ul>
-  //                     </PopoverBody>
-  //                   </Popover>
-  //                 </InputGroupAddon>
-  //               </InputGroup>
-  //               <div className="input-address-buttons">
-  //               </div>
-  //             </FormGroup>
-  //           </Form>
-  //         </div>
-  //         <Table hover={true}>
-  //           <Totals
-  //             fiatSym={this.props.fiatSym}
-  //             addresses={this.state.addresses}
-  //             checkBalanceState={this.props.checkBalanceState}
-  //             cryptoSym={this.props.cryptoSym}
-  //           />
-  //           <Addresses entries={this.state.addresses}
-  //                     delete={this.deleteAddress}
-  //           />
-  //         </Table>
-  //       </div>
-  //     </div>
 }
 
 
@@ -459,7 +333,7 @@ export default class AddressList extends React.Component {
     container: {
       flex: 1,
       // flexDirection: 'column',
-      backgroundColor: '#99ffff',
+      backgroundColor: 'white',
       borderColor: "black",
       borderWidth: 2
     },

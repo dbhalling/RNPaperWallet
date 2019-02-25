@@ -1,5 +1,6 @@
 import React from 'react';
 import { Picker, StyleSheet, Text, View } from 'react-native';
+import { Container, Header, Left, Body, Right, Title } from 'native-base';
 import CryptoDropdown from "./CryptoDropdown";
 import FiatDropdown from "./FiatDropdown";
 
@@ -30,12 +31,21 @@ export default class HeaderView extends React.Component {
       dcr: "Decred Paper Wallet Checker!",
       dgb: "DKkftwDYUQpMZCcDmcgtbLnCk5sf1qV9Hi",
 
+      loading: true
       // popoverOpen: false,
       // popoverOpenAd: false,
     };
 
     this.toggle = this.toggle.bind(this);
     this.toggleAd = this.toggleAd.bind(this);
+  }
+
+  async componentWillMount() {
+    await Expo.Font.loadAsync({
+      'Roboto': require('native-base/Fonts/Roboto.ttf'),
+      'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+    });
+    this.setState({loading: false});
   }
 
   toggle() {
@@ -51,6 +61,9 @@ export default class HeaderView extends React.Component {
   }
 
   render(){
+    if (this.state.loading) {
+      return <Expo.AppLoading />;
+    }
     const cryptoSym = this.props.cryptoSym;
     const fiatPrice = this.props.fiatPrice;
     const cryptoFiatRate = (
@@ -60,103 +73,46 @@ export default class HeaderView extends React.Component {
         }
       </Text>
     );
-    // <h3 className="text-center" id="fiat-current-price">
-    //     {`Current ${this.props.cryptoSym.toUpperCase()} /
-    //     ${this.props.fiatSym.toUpperCase()} : ${fiatPrice ? fiatPrice.toFixed(2) : ""}`
-    //     }
-    //   </h3>
-
 
     return (
-        <View
+        <Container
           style={{
-            flex: 2/5,
-            backgroundColor: "#99ffff",
+            // height: 'auto',
+            flex: 1/3,
             border: "solid",
             borderColor: "black",
             borderWidth: 2
           }}
         >
-          <Text style={{
-                  fontSize: 30,
-                  fontWeight: '500',
-                  textAlign: "center"
-                }}
-          >
-            Paper Wallets Checker!
-          </Text>
-          <Text style={{textAlign: "center"}}>
-            {this.state[cryptoSym]}
-          </Text>
-          <View style={{
+          <Header>
+            <Left style={{flex: .9}} />
+            <Body style={{flex: 3}}>
+              <Title style={{
+                      // fontSize: 30,
+                      // fontWeight: '500',
+                      // textAlign: "center"
+                    }}
+              >
+                Paper Wallet Checker!
+              </Title>
+            </Body>
+            <Right style={{flex: .5}}/>
+          </Header>
+          <Container style={{
             flexDirection: "row",
             // justifyContent: "space-between"
           }}
           >
-            <View style={{
-                    flex: 1,
-                    borderColor: "black",
-                    borderWidth: 1,
-                    borderRadius: 3
-                  }}
-            >
-              <CryptoDropdown
-                handleCryptoSymId={this.props.handleCryptoSymId}
-                handleCheckBalanceState={this.props.handleCheckBalanceState}
-              />
-            </View>
-            <View style={{
-                    flex: 1,
-                    borderColor: "black",
-                    borderWidth: 1,
-                    borderRadius: 3
-                  }}
-            >
-              <FiatDropdown
-                handleFiatSym={this.props.handleFiatSym}
-              />
-            </View>
-          </View>
+            <CryptoDropdown
+              handleCryptoSymId={this.props.handleCryptoSymId}
+              handleCheckBalanceState={this.props.handleCheckBalanceState}
+            />
+            <FiatDropdown
+              handleFiatSym={this.props.handleFiatSym}
+            />
+          </Container>
           {this.props.checkBalanceState === 'checked' ? cryptoFiatRate : <Text/>}
-        </View>
+        </Container>
     );
   }
-  // <div className="header row">
-  //         <div className="qrcode col-2">
-  //           <QRCode value={this.state[cryptoSym]} renderAs={"svg"} className={"qrcode-canvas"} level="H" />
-  //         </div>
-  //         <div className="col-10">
-  //           <h1 className="donation-address" onClick={this.toggle}>
-  //             <Clipboard text={this.state[cryptoSym]}>
-  //               {this.state[cryptoSym]}
-  //               {" "}
-  //               <FontAwesomeIcon icon="copy" className="copy-icon"
-  //                               id="PopoverAddressHeader"
-  //               />
-  //             </Clipboard>
-  //             <Popover className="popoverAddress" placement="bottom" isOpen={this.state.popoverOpen}
-  //                       target="PopoverAddressHeader" toggle={this.toggle}
-  //                       boundariesElement=".alert-copy-clipboard"
-  //               >
-  //                 <Alert color="warning" className="alert-copy-clipboard">
-  //                   Copied to Clipboard
-  //                 </Alert>
-  //             </Popover>
-  //           </h1>
-  //           <div className="col-10 text-center">
-  //             <h3 className="slogan">Your Crypto Paper Wallet Checker !
-  //               {" "}
-  //               <CryptoDropdown
-  //                 handleCryptoSymId={this.props.handleCryptoSymId}
-  //                 handleCheckBalanceState={this.props.handleCheckBalanceState}
-  //               />
-  //               <FiatDropdown
-  //                 handleFiatSym={this.props.handleFiatSym}
-  //               />
-  //             </h3>
-  //             {this.props.checkBalanceState === 'checked' ? cryptoFiatRate : ''}
-  //           </div>
-  //           <Ad popoverOpenAd={this.state.popoverOpenAd} toggleAd={this.toggleAd}/>
-  //         </div>
-  //       </div>
 }

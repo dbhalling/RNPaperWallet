@@ -1,5 +1,6 @@
 import React from 'react';
-import { Picker, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Container, Content, Picker, Form } from "native-base";
 
 export default class CryptoDropdown extends React.Component {
   constructor(props) {
@@ -45,11 +46,7 @@ export default class CryptoDropdown extends React.Component {
       <Picker.Item key={crypto.name} label={crypto.name}
         value={crypto.name}
       />
-
     );
-    // <DropdownItem key={crypto.name} onClick={() => this.toggleCrypto(crypto)}>
-    //     {crypto.name}
-    //   </DropdownItem>
   }
 
   toggleCrypto(itemValue, itemIndex) {
@@ -70,42 +67,20 @@ export default class CryptoDropdown extends React.Component {
     var listCryptos = cryptoList.map(this.cryptoList);
 
     return (
-      <Picker
-        itemStyle={{color: "white"}}
-        selectedValue={this.state.dropdownValue}
-        onValueChange={(itemValue, itemIndex) =>
-          this.toggleCrypto(itemValue, itemIndex)
-        }
-      >
-        {listCryptos}
-      </Picker>
+      <Content>
+        <Form>
+          <Picker
+            mode="dropdown"
+            textStyle={{ color: "blue" }}
+            selectedValue={this.state.dropdownValue}
+            onValueChange={(itemValue, itemIndex) =>
+              this.toggleCrypto(itemValue, itemIndex)
+            }
+          >
+            {listCryptos}
+          </Picker>
+        </Form>
+      </Content>
     );
-
-    // <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
-    //     <DropdownToggle caret>
-    //       {this.state.dropdownValue}
-    //     </DropdownToggle>
-    //     <DropdownMenu
-    //       modifiers={{
-    //         setMaxHeight: {
-    //           enabled: true,
-    //           order: 890,
-    //           fn: (data) => {
-    //             return {
-    //               ...data,
-    //               styles: {
-    //                 ...data.styles,
-    //                 overflow: 'auto',
-    //                 maxHeight: 200,
-    //               },
-    //             };
-    //           },
-    //         },
-    //       }}
-    //       className="crypto-list-dropdown"
-    //     >
-    //       {listCryptos}
-    //     </DropdownMenu>
-    //   </ButtonDropdown>
   }
 }

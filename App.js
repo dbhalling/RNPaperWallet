@@ -65,6 +65,7 @@ export default class App extends React.Component {
   render() {
     return (
         <View style={{
+            // height: 'auto',
             flex: 1,
             // flexDirection: "row",
           }}
