@@ -1,9 +1,11 @@
 import React from 'react';
-import { Button, StyleSheet, Text, TextInput,
+import { StyleSheet, Text, TextInput,
          TouchableOpacity, View, Modal, ScrollView } from 'react-native';
+import { Button } from "native-base";
 import WAValidator from '../WAV/wav';
 import {allApis} from '../apis/allApis';
 
+import Totals from './Totals';
 import Addresses from './Addresses';
 import QrAddressReader from './QrAddressReader';
 
@@ -12,10 +14,7 @@ export default class AddressList extends React.Component {
     super(props);
 
     this.state = {
-      addresses: [
-        {key: "1337ipJbP7U9mi9cdLngL3g5Napum7tWzM", cryptoAmount: 1, fiatAmount: 3600.63},
-        {key: "3CMCRgEm8HVz3DrWaCCid3vAANE42jcEv9", cryptoAmount: 10, fiatAmount: 36000.63}
-      ],
+      addresses: [],
       cryptoSym: this.props.cryptoSym,
       cryptoId: this.props.cryptoId,
       filename: 'PaperWalletChecker.csv',
@@ -228,99 +227,85 @@ export default class AddressList extends React.Component {
       <ScrollView style={styles.container} contentContainerStyle={styles.contentContainerStyle}>
         <View style={{
                 // flex: 1,
-                flexDirection: "row",
-                justifyContent: "center"
+                flexDirection: "row"
               }}
         >
           {(this.state.addresses.length !== 0) &&
-            (<TouchableOpacity
-               style={{
-                 flex: 1/3,
-                 backgroundColor: "#218838"
-               }}
-               onPress={this.checkBalance}
-             >
-               <Text style={{
-                       color: "white",
-                       textAlign: "center"
-                     }}
+              (<Button success
+                style={{
+                  marginTop: 5,
+                  marginBottom: 5,
+                  padding: 5,
+                  borderRadius: 8
+                }}
+                 onPress={this.checkBalance}
                >
-                 Check Balance
-               </Text>
-             </TouchableOpacity>
-            )
-          }
-          <TouchableOpacity
-            style={{
-              flex: 1/3,
-              backgroundColor: "#ffc107"
-            }}
-            onPress={console.log("load")}
-          >
-            <Text style={{
-                    color: "white",
-                    textAlign: "center"
-                  }}
-            >
-              Load Spreadsheet
-            </Text>
-          </TouchableOpacity>
-          {(this.state.addresses.length !== 0) &&
-            (<TouchableOpacity
-               style={{
-                 flex: 1/3,
-                 backgroundColor: "#0069d9"
-               }}
-               onPress={console.log("export")}
-             >
-               <Text style={{
-                       color: "white",
-                       textAlign: "center"
-                     }}
-               >
-                 Export Spreadsheet
-               </Text>
-             </TouchableOpacity>
+                <Text style={{color: "white", fontWeight: "400", fontSize: 20}}>Check Balance</Text>
+              </Button>
             )
           }
         </View>
         <Modal animationType = {"slide"} transparent = {false}
-           visible = {this.state.qrmodal}
-           onRequestClose = {() => { console.log("Modal has been closed.") } }
-         >
-           {this.state.qrmodal && <QrAddressReader addAddress={this.addAddress} toggleQrModal={this.toggleQrModal} />}
-        </Modal>
-        <TouchableOpacity
-           style={{
-             color: "white",
-             backgroundColor: "#0069d9"
-           }}
-           onPress={this.toggleQrModal}
-         >
-          <Text>QRCode</Text>
-        </TouchableOpacity>
-        <TextInput
-          onChangeText={inputText => this.setState({inputText})}
-          value={this.state.inputText}
-          style={styles.textInput}
-        />
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#17a2b8"
+          visible = {this.state.qrmodal}
+          style={{flex: 1.5,
+            alignItems: "center"
           }}
-          onPress={this.addAddress}
+          onRequestClose = {() => { this.toggleQrModal() } }
         >
-          <Text style={{
-                  color: "white",
-                  textAlign: "center"
-                }}
-          >
-            Enter a New Paper Wallet
-          </Text>
-        </TouchableOpacity>
+        {this.state.qrmodal && <QrAddressReader addAddress={this.addAddress} toggleQrModal={this.toggleQrModal} />}
+        </Modal>
+        <View
+          style={{ flexDirection: "row" }}
+        >
+          <TextInput
+            onChangeText={inputText => this.setState({inputText})}
+            value={this.state.inputText}
+            style={styles.textInput}
+            />
+            <TouchableOpacity
+               style={{
+                 marginLeft: 2,
+                 padding: 2,
+                 color: "white",
+                 backgroundColor: "#0069d9",
+                 borderRadius: 8
+               }}
+               onPress={this.toggleQrModal}
+             >
+              <Text style={{color: "white", fontWeight: "400"}}>QR</Text>
+            </TouchableOpacity>
+        </View>
+
+        <View
+          style={{ marginTop: 5}}
+        >
+          <Button
+            style={{  borderRadius: 8}}
+            onPress={this.addAddress}
+            >
+            <Text style={{
+                    color: "white",
+                    padding: 5,
+                    fontSize: 20,
+                  }}
+                  >
+                  Enter a New Paper Wallet
+                  </Text>
+            </Button>
+          </View>
+
+        {(this.state.addresses.length !== 0) && (
+          <Totals
+            fiatSym={this.props.fiatSym}
+            fiatPrice ={this.props.fiatPrice}
+            addresses={this.state.addresses}
+            checkBalanceState={this.props.checkBalanceState}
+            cryptoSym={this.props.cryptoSym}
+          />
+        )}
         <Addresses entries={this.state.addresses}
                    delete={this.deleteAddress}
-                   cryptoSym={this.state.cryptoSym}
+                   cryptoSym={this.props.cryptoSym}
                    fiatSym={this.props.fiatSym}
         />
       </ScrollView>
@@ -329,13 +314,65 @@ export default class AddressList extends React.Component {
 }
 
 
+
+// <TouchableOpacity
+//   style={{
+//     flex: 1/3,
+//     backgroundColor: "#218838"
+//   }}
+//   onPress={this.checkBalance}
+// >
+//   <Text style={{
+//           color: "white",
+//           textAlign: "center"
+//         }}
+//   >
+//     Check Balance
+//   </Text>
+// </TouchableOpacity>
+
+// <TouchableOpacity
+//   style={{
+//     flex: 1/3,
+//     backgroundColor: "#ffc107"
+//   }}
+//   onPress={console.log("load")}
+// >
+//   <Text style={{
+//           color: "white",
+//           textAlign: "center"
+//         }}
+//   >
+//     Load Spreadsheet
+//   </Text>
+// </TouchableOpacity>
+
+// {(this.state.addresses.length !== 0) &&
+//   (<TouchableOpacity
+//      style={{
+//        flex: 1/3,
+//        backgroundColor: "#0069d9"
+//      }}
+//      onPress={console.log("export")}
+//    >
+//      <Text style={{
+//              color: "white",
+//              textAlign: "center"
+//            }}
+//      >
+//        Export Spreadsheet
+//      </Text>
+//    </TouchableOpacity>
+//   )
+// }
+
  const styles = StyleSheet.create({
     container: {
       flex: 1,
       // flexDirection: 'column',
-      backgroundColor: 'white',
-      borderColor: "black",
-      borderWidth: 2
+      // backgroundColor: 'white',
+      // borderColor: "black",
+      // borderWidth: 2
     },
     contentContainerStyle: {
       alignItems: 'center',
@@ -347,7 +384,7 @@ export default class AddressList extends React.Component {
       borderColor: "black",
       borderWidth: 1,
       borderRadius: 14,
-      width: 300,
+      width: 250,
       height: 30
     },
 });

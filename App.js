@@ -1,11 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar } from 'react-native';
+import { Root } from "native-base";
 
 import HeaderView from './components/HeaderView';
 import AddressList from './components/AddressList';
-
-// GLOBAL.XMLHttpRequest = GLOBAL.originalXMLHttpRequest || GLOBAL.XMLHttpRequest;
-// var WAValidator = require('./wav');
 
 export default class App extends React.Component {
   constructor(props) {

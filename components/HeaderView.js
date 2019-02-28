@@ -1,8 +1,9 @@
 import React from 'react';
-import { Picker, StyleSheet, Text, View } from 'react-native';
-import { Container, Header, Left, Body, Right, Title } from 'native-base';
+import { Picker, StyleSheet, View, Modal } from 'react-native';
+import { Container, Header, Left, Body, Right, Title, Button, Icon, Text } from 'native-base';
 import CryptoDropdown from "./CryptoDropdown";
 import FiatDropdown from "./FiatDropdown";
+import Menu from "./Menu";
 
 export default class HeaderView extends React.Component {
   constructor(props) {
@@ -31,13 +32,15 @@ export default class HeaderView extends React.Component {
       dcr: "Decred Paper Wallet Checker!",
       dgb: "DKkftwDYUQpMZCcDmcgtbLnCk5sf1qV9Hi",
 
-      loading: true
+      loading: true,
+      menumodal: false,
       // popoverOpen: false,
       // popoverOpenAd: false,
     };
 
     this.toggle = this.toggle.bind(this);
     this.toggleAd = this.toggleAd.bind(this);
+    this.toggleMenuModal = this.toggleMenuModal.bind(this);
   }
 
   async componentWillMount() {
@@ -60,6 +63,10 @@ export default class HeaderView extends React.Component {
     });
   }
 
+  toggleMenuModal() {
+    this.setState({menumodal: !this.state.menumodal});
+  }
+
   render(){
     if (this.state.loading) {
       return <Expo.AppLoading />;
@@ -75,17 +82,27 @@ export default class HeaderView extends React.Component {
     );
 
     return (
-        <Container
+        <View
           style={{
             // height: 'auto',
-            flex: 1/3,
-            border: "solid",
-            borderColor: "black",
-            borderWidth: 2
+            flex: 0.23,
           }}
         >
+          <Modal animationType = {"slide"} transparent = {false}
+          visible = {this.state.menumodal}
+          style={{flex: 1}}
+          onRequestClose = {() => { this.toggleMenuModal() } }
+          >
+            <Menu toggleMenuModal={this.toggleMenuModal} />
+          </Modal>
           <Header>
-            <Left style={{flex: .9}} />
+            <Left style={{flex: .9}}>
+              <Button transparent
+                onPress={this.toggleMenuModal}
+              >
+                <Icon name='menu' />
+              </Button>
+            </Left>
             <Body style={{flex: 3}}>
               <Title style={{
                       // fontSize: 30,
@@ -96,9 +113,9 @@ export default class HeaderView extends React.Component {
                 Paper Wallet Checker!
               </Title>
             </Body>
-            <Right style={{flex: .5}}/>
+            <Right style={{flex: .5}} />
           </Header>
-          <Container style={{
+          <View style={{
             flexDirection: "row",
             // justifyContent: "space-between"
           }}
@@ -110,9 +127,8 @@ export default class HeaderView extends React.Component {
             <FiatDropdown
               handleFiatSym={this.props.handleFiatSym}
             />
-          </Container>
-          {this.props.checkBalanceState === 'checked' ? cryptoFiatRate : <Text/>}
-        </Container>
+          </View>
+        </View>
     );
   }
 }

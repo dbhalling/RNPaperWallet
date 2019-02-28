@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button, Modal, StyleSheet, View, TouchableHighlight } from 'react-native';
+import { Modal, StyleSheet, View, TouchableHighlight } from 'react-native';
 import QRCode from 'react-native-qrcode';
-import { Container, Content, Card, CardItem, Body, Text } from "native-base";
+import { Container, Content, Card, CardItem, Body, Text, Button } from "native-base";
 import { Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -90,21 +90,25 @@ export default class AddressList extends React.Component {
         <Content>
           <Modal animationType = {"slide"} transparent = {false}
              visible = {this.state.modal}
+
              onRequestClose = {() => { this.toggleModal() } }
           >
-             <View>
-                <Text>{address}</Text>
+             <View style={{ alignItems: "center" }}>
+                <Text style={{ margin: 10}}>{address}</Text>
                 <QRCode
                   value={address}
-                  size={200}
+                  size={300}
                   bgColor='black'
                   fgColor='white'
                 />
-                <TouchableHighlight onPress = {() => {
-                   this.toggleModal()}}
-                >
-                  <Text>Close Modal</Text>
-                </TouchableHighlight>
+                <View style={{ alignItems: "center" }}>
+                  <Button
+                    style={{ margin: 15}}
+                    onPress = {() => {this.toggleModal()}}
+                  >
+                    <Text>Close Modal</Text>
+                  </Button>
+                </View>
              </View>
           </Modal>
           {listAddresses}
